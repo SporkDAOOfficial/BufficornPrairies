@@ -11,7 +11,7 @@ error BufficornGrazin();
 error BufficornNotFound();
 error NotYourBufficorn();
 
-contract BufficornPrairies is AccessControl, IERC721 {
+contract BufficornPrairies is AccessControl {
 
     uint public grazingPeriod;
     address public bufficorn; 
