@@ -19,11 +19,12 @@ contract BufficornPrairies is AccessControl, IERC721, IERC721Receiver {
     bytes32 public constant BLM_ROLE = keccak256("BLM_ROLE");
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
 
-    mapping(address => GrazinBufficorns) public onPrairie; 
+    mapping(address => GrazinBufficorn) public onPrairie; 
     
     struct GrazinBufficorn {
         uint id; 
         uint grazinStart;
+        bool isGrazin;
     }
 
     event GoinGrazin(address sender, uint bufficorns);
@@ -65,7 +66,8 @@ contract BufficornPrairies is AccessControl, IERC721, IERC721Receiver {
         IERC721(bufficorn).approve(address(this), _tokenId);
         IERC721(bufficorn).safeTransferFrom(msg.sender, address(this), _tokenId);
         
-        onPrairie[msg.sender].push(GrazinBufficorn(_tokenId, now.timestamp));
+        
+        onPrairie[msg.sender] = GrazinBufficorn(_tokenId, block.timestamp, true);
 
         emit GoinGrazin(msg.sender, _tokenId);
     }
