@@ -83,16 +83,18 @@ contract BufficornPrairies is AccessControl {
     }
 
     function _backToRanch(uint256 _tokenId) internal {
-        if(onPrairie[msg.sender][_tokenId].grazinStart + grazingPeriod > block.timestamp) {
+        GrazinBufficorn storage myBuff = onPrairie[msg.sender][_tokenId];
+
+        if(myBuff.grazinStart + grazingPeriod > block.timestamp || !myBuff.isGrazin) {
             revert BufficornGrazin();
         }
 
-        GrazinBufficorn storage myBuff = onPrairie[msg.sender][_tokenId];
-            
+        myBuff.isGrazin = false;
+
         IERC721(bufficorn).approve(address(this), _tokenId);
         IERC721(bufficorn).safeTransferFrom(address(this), msg.sender, _tokenId);
         
-        myBuff.isGrazin = false; 
+         
 
         emit GoneHome(msg.sender, _tokenId, block.timestamp);
     }
